@@ -33,6 +33,12 @@ class AGEngine
 
         bool enableVideo(bool enable = true);
 
+        bool enableAudio(bool enable = true);
+
+        bool setVideoProfile(int videoProfile);
+
+        bool setAudioProfile(int audioProfile, int audioScenario);
+
         bool isVideoEnabled();
 
         bool isScreenCaptureEnabled();

@@ -24,7 +24,22 @@ int main(int argc, char * const argv[]) {
     parser.add_long_opt("channel", &channelId, "Channel Id/required", opt_parser::require_argu);
 
     uint32_t channelProfile = 0;
-    parser.add_long_opt("channelProfile", &channelProfile, "channel_profile:(0:COMMUNICATION),(1:broadcast) default is 0/option");
+    parser.add_long_opt("channelProfile", &channelProfile, "channel profile:(0:COMMUNICATION),(1:broadcast) default is 0/option");
+
+    uint32_t audioProfile = 0;
+    parser.add_long_opt("audioProfile", &audioProfile, "audio profile:refer IAgoraRtcEngine.h/option");
+
+    uint32_t audioScenario = 0;
+    parser.add_long_opt("audioScenario", &audioScenario, "audio scenario:refer IAgoraRtcEngine.h/option");
+
+    uint32_t videoProfile = 38;
+    parser.add_long_opt("videoProfile", &videoProfile, "video profile:refer IAgoraRtcEngine.h/option");
+
+    uint32_t enableVideo = 1;
+    parser.add_long_opt("enableVideo", &enableVideo, "enable video/option");
+
+    uint32_t enableAudio = 1;
+    parser.add_long_opt("enableAudio", &enableAudio, "enable audio/option");
 
     if (!parser.parse_opts(argc, argv) || appId.empty() || channelId.empty()) {
         ostringstream sout;
@@ -35,6 +50,11 @@ int main(int argc, char * const argv[]) {
 
     AppConfig cfg;
     cfg.uid = uid;
+    cfg.audioProfile = audioProfile; 
+    cfg.audioScenario = audioScenario; 
+    cfg.videoProfile = videoProfile; 
+    cfg.enableVideo = enableVideo; 
+    cfg.enableAudio = enableAudio; 
     cfg.appId = appId;
     cfg.channelId = channelId;
     cfg.channelProfile = channelProfile; 

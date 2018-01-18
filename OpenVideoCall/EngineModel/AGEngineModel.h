@@ -27,10 +27,10 @@ class AGEngineModel : public MsgHandler
         ~AGEngineModel();
 
         //message handler
-        bool onJoinChannelMsg(void* msg);
-        bool onLeaveChannelMsg(void* msg);
-        bool onMuteVideoMsg(void* msg);
-        bool onMuteAudioMsg(void* msg);
+        bool onOpenMsg(void* msg);
+        bool onCloseMsg(void* msg);
+        bool onEnableVideoMsg(void* msg);
+        bool onEnableAudioMsg(void* msg);
         bool onConfigureMsg(void* msg);
         bool onPrintDeviceInfoMsg(void* msg);
         bool onExitMsg(void* msg); 

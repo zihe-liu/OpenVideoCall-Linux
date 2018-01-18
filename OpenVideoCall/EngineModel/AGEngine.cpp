@@ -52,12 +52,7 @@ bool AGEngine::joinChannel(const char* channelId, int uid, int channelProfie)
         else
             m_agoraEngine->setChannelProfile(CHANNEL_PROFILE_COMMUNICATION);
 
-        m_agoraEngine->enableVideo();
-        m_agoraEngine->setVideoProfile(VIDEO_PROFILE_LANDSCAPE_360P_9, false);
-
         AParameter msp(*m_agoraEngine);
-        msp->setBool("che.audio.external_device", true);
-        msp->setInt("che.audio.audioSampleRate", 48000);
         msp->setInt("che.video.local.camera_index", 0);
 
         ret = m_agoraEngine->joinChannel(NULL, channelId, NULL, uid);
@@ -91,6 +86,18 @@ bool AGEngine::enableVideo(bool enable)
         ret = m_agoraEngine->enableVideo();
     else
         ret = m_agoraEngine->disableVideo();
+
+    return ret == 0 ? true : false;
+}
+
+bool AGEngine::enableAudio(bool enable)
+{
+    int ret = -1;
+
+    if (enable)
+        ret = m_agoraEngine->enableAudio();
+    else
+        ret = m_agoraEngine->disableAudio();
 
     return ret == 0 ? true : false;
 }
@@ -188,6 +195,20 @@ bool AGEngine::sendChatMessage(int streamId, const char* chatMessage)
     int messageLen = strlen(chatMessage);
 
     int ret = m_agoraEngine->sendStreamMessage(streamId, chatMessage, messageLen);
+
+    return ret == 0 ? true : false;
+}
+
+bool AGEngine::setVideoProfile(int videoProfile)
+{
+    int ret = m_agoraEngine->setVideoProfile((VIDEO_PROFILE_TYPE)videoProfile, false);
+
+    return ret == 0 ? true : false;
+}
+
+bool AGEngine::setAudioProfile(int audioProfile, int audioScenario)
+{
+    int ret = m_agoraEngine->setAudioProfile((AUDIO_PROFILE_TYPE)audioProfile, (AUDIO_SCENARIO_TYPE)audioScenario);
 
     return ret == 0 ? true : false;
 }

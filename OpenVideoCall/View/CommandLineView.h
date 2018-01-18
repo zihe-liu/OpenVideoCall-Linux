@@ -17,10 +17,15 @@ class CommandLineView : public MsgHandler{
     private:
         bool onCommand(const string& cmd, stringstream& params);
 
-        bool joinChannel(); 
-        bool leaveChannel(); 
-        bool muteAudio(int mute); 
-        bool muteVideo(int mute);
+        bool open(); 
+
+        bool close(); 
+
+        bool enableAudio(int enable); 
+
+        bool enableVideo(int enable);
+
         bool printDeviceInfo(); 
+
         bool exit(); 
 };

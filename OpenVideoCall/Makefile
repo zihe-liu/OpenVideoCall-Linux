@@ -14,7 +14,7 @@ INCPATH =-I. -I./../include
 
 SRC =$(wildcard *.cpp View/*.cpp Controller/*.cpp EngineModel/*.cpp )
 OBJ=$(addsuffix .o, main $(basename $(SRC)))
-TARGET=testTarget
+TARGET=openVideoCall
 
 
 .PHONY: all clean

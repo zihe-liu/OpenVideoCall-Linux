@@ -18,11 +18,11 @@ AGEngineModel* AGEngineModel::Get() {
 
 AGEngineModel::AGEngineModel() {
 
-    registerHandler(MSG_JOIN_CHANNEL,(handler_ptr)&AGEngineModel::onJoinChannelMsg);
-    registerHandler(MSG_LEAVE_CHANNEL, (handler_ptr)&AGEngineModel::onLeaveChannelMsg);
-    registerHandler(MSG_MUTE_VIDEO, (handler_ptr)&AGEngineModel::onMuteVideoMsg);
-    registerHandler(MSG_MUTE_AUDIO, (handler_ptr)&AGEngineModel::onMuteAudioMsg);
-    registerHandler(MSG_CONFIGURE_MODEL, (handler_ptr)&AGEngineModel::onConfigureMsg);
+    registerHandler(MSG_OPEN,(handler_ptr)&AGEngineModel::onOpenMsg);
+    registerHandler(MSG_CLOSE, (handler_ptr)&AGEngineModel::onCloseMsg);
+    registerHandler(MSG_CONFIGURE, (handler_ptr)&AGEngineModel::onConfigureMsg);
+    registerHandler(MSG_ENABLE_VIDEO, (handler_ptr)&AGEngineModel::onEnableVideoMsg);
+    registerHandler(MSG_ENABLE_AUDIO, (handler_ptr)&AGEngineModel::onEnableAudioMsg);
     registerHandler(MSG_PRINT_DEVICE_INFO, (handler_ptr)&AGEngineModel::onPrintDeviceInfoMsg);
     registerHandler(MSG_EXIT, (handler_ptr)&AGEngineModel::onExitMsg);
 
@@ -48,29 +48,51 @@ void AGEngineModel::initialize() {
     m_playoutMgr->create(m_engine->getRtcEngine());
 }
 
-bool AGEngineModel::onJoinChannelMsg(void* msg) {
-    cout << "model onJoinChannelMsg" <<endl;
+bool AGEngineModel::onOpenMsg(void* msg) {
+    cout << "AgoraRtcEngine:open" <<endl;
+
+    m_engine->enableVideo(m_cfg.enableVideo);
+
+    m_engine->enableAudio(m_cfg.enableAudio);
+
+    m_engine->setVideoProfile(m_cfg.videoProfile);
+
+    m_engine->setAudioProfile(m_cfg.audioProfile, m_cfg.audioScenario);
 
     return m_engine->joinChannel(m_cfg.channelId.c_str(), m_cfg.uid, m_cfg.channelProfile); 
 }
 
-bool AGEngineModel::onLeaveChannelMsg(void* msg) {
-    cout << "model onLeaveChannelMsg" <<endl;
+bool AGEngineModel::onCloseMsg(void* msg) {
+    cout << "AgoraRtcEngine:close" <<endl;
 
     return m_engine->leaveChannel(); 
 }
 
-bool AGEngineModel::onMuteVideoMsg(void* msg) {
-    int* mute = reinterpret_cast<int*>(msg);
+bool AGEngineModel::onEnableVideoMsg(void* msg) {
+    int enable = *(reinterpret_cast<int*>(msg));
 
-    cout << "model onMuteVideoMsg: " << *mute <<endl;
+    if(enable != m_cfg.enableVideo) {
+        m_cfg.enableVideo =  enable;
+        m_engine->enableVideo(enable);
+        cout << "AgoraRtcEngine: enable video: " << enable <<endl;
+    } else {
+        cout << "AgoraRtcEngine: already enabled video: " << enable <<endl;
+    }
+
     return true;
 }
 
-bool AGEngineModel::onMuteAudioMsg(void* msg) {
-    int* mute = reinterpret_cast<int*>(msg);
+bool AGEngineModel::onEnableAudioMsg(void* msg) {
+    int enable = *(reinterpret_cast<int*>(msg));
 
-    cout << "model onMuteAudioMsg: " << *mute <<endl;
+    if(enable != m_cfg.enableAudio) {
+        m_cfg.enableAudio =  enable;
+        m_engine->enableAudio(enable);
+        cout << "AgoraRtcEngine: enable audio: " << enable <<endl;
+    } else {
+        cout << "AgoraRtcEngine: already enabled audio: " << enable <<endl;
+    }
+
     return true;
 }
 
@@ -130,6 +152,5 @@ void AGEngineModel::release() {
 
 
 void AGEngineModel::onEvent(int id, void* pData) {
-    cout << "on event:"<<id<< endl;
 }
 

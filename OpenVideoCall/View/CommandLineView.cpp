@@ -20,7 +20,7 @@ CommandLineView::~CommandLineView() {
 
 void CommandLineView::configure(const AppConfig& config) {
     if(m_controller)
-        m_controller->sendMsg(this,MSG_CONFIGURE_MODEL,(void*)&config);
+        m_controller->sendMsg(this,MSG_CONFIGURE,(void*)&config);
 }
 
 void CommandLineView::run() {
@@ -53,26 +53,26 @@ void CommandLineView::run() {
 bool CommandLineView::onCommand(const string& cmd, stringstream& params) {
 
     if(cmd.compare("open") == 0 ) {
-        return joinChannel();
+        return open();
     } 
     else if(cmd.compare("close") == 0) {
-        return leaveChannel();
+        return close();
     }
-    else if(cmd.compare("mute_video") == 0) {
-        string mute;
-        params >> mute;
+    else if(cmd.compare("enable_video") == 0) {
+        string enable;
+        params >> enable;
 
         int flag = 0;
-        sscanf(mute.c_str(),"%d",&flag);
-        return muteVideo(flag);
+        sscanf(enable.c_str(),"%d",&flag);
+        return enableVideo(flag);
     }
-    else if(cmd.compare("mute_audio") == 0) {
-        string mute;
-        params >> mute;
+    else if(cmd.compare("enable_audio") == 0) {
+        string enable;
+        params >> enable;
 
         int flag = 0;
-        sscanf(mute.c_str(),"%d",&flag);
-        return muteAudio(flag);
+        sscanf(enable.c_str(),"%d",&flag);
+        return enableAudio(flag);
     }  
     else if(cmd.compare("print_device_info") == 0) {
         return printDeviceInfo();
@@ -90,32 +90,32 @@ bool CommandLineView::printDeviceInfo() {
     return m_controller->sendMsg(this, MSG_PRINT_DEVICE_INFO,NULL);
 }
 
-bool CommandLineView::joinChannel() {
+bool CommandLineView::open() {
     if(!m_controller)
         return false;
 
-    return m_controller->sendMsg(this, MSG_JOIN_CHANNEL,NULL);
+    return m_controller->sendMsg(this, MSG_OPEN, NULL);
 }
 
-bool CommandLineView::leaveChannel() {
+bool CommandLineView::close() {
     if(!m_controller)
         return false;
 
-    return m_controller->sendMsg(this, MSG_LEAVE_CHANNEL, NULL);
+    return m_controller->sendMsg(this, MSG_CLOSE, NULL);
 }
 
-bool CommandLineView::muteVideo(int mute) {
+bool CommandLineView::enableVideo(int enable) {
     if(!m_controller)
         return false;
 
-    return m_controller->sendMsg(this, MSG_MUTE_VIDEO , (void*)&mute);
+    return m_controller->sendMsg(this, MSG_ENABLE_VIDEO , (void*)&enable);
 }
 
-bool CommandLineView::muteAudio(int mute) {
+bool CommandLineView::enableAudio(int enable) {
     if(!m_controller)
         return false;
 
-    return m_controller->sendMsg(this, MSG_MUTE_AUDIO , (void*)&mute);
+    return m_controller->sendMsg(this, MSG_ENABLE_AUDIO , (void*)&enable);
 }
 
 bool CommandLineView::exit() {
