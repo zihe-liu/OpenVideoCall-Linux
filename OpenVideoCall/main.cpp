@@ -41,6 +41,13 @@ int main(int argc, char * const argv[]) {
     uint32_t enableAudio = 1;
     parser.add_long_opt("enableAudio", &enableAudio, "enable audio/option");
 
+    uint32_t enableLocalVideo = 1;
+    parser.add_long_opt("enableLocalVideo", &enableLocalVideo, "enable local video/option");
+
+    uint32_t enableLocalAudio = 1;
+    parser.add_long_opt("enableLocalAudio", &enableLocalAudio, "enable local audio/option");
+
+
     if (!parser.parse_opts(argc, argv) || appId.empty() || channelId.empty()) {
         ostringstream sout;
         parser.print_usage(argv[0], sout);
@@ -55,6 +62,8 @@ int main(int argc, char * const argv[]) {
     cfg.videoProfile = videoProfile; 
     cfg.enableVideo = enableVideo; 
     cfg.enableAudio = enableAudio; 
+    cfg.enableLocalVideo = enableLocalVideo; 
+    cfg.enableLocalAudio = enableLocalAudio;
     cfg.appId = appId;
     cfg.channelId = channelId;
     cfg.channelProfile = channelProfile; 

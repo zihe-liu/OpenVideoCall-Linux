@@ -74,6 +74,23 @@ bool CommandLineView::onCommand(const string& cmd, stringstream& params) {
         sscanf(enable.c_str(),"%d",&flag);
         return enableAudio(flag);
     }  
+    else if(cmd.compare("enable_local_video") == 0) {
+        string enable;
+        params >> enable;
+
+        int flag = 0;
+        sscanf(enable.c_str(),"%d",&flag);
+        return enableLocalVideo(flag);
+    }
+    else if(cmd.compare("enable_local_audio") == 0) {
+        string enable;
+        params >> enable;
+
+        int flag = 0;
+        sscanf(enable.c_str(),"%d",&flag);
+        return enableLocalAudio(flag);
+    }  
+
     else if(cmd.compare("print_device_info") == 0) {
         return printDeviceInfo();
     }  
@@ -116,6 +133,20 @@ bool CommandLineView::enableAudio(int enable) {
         return false;
 
     return m_controller->sendMsg(this, MSG_ENABLE_AUDIO , (void*)&enable);
+}
+
+bool CommandLineView::enableLocalVideo(int enable) {
+    if(!m_controller)
+        return false;
+
+    return m_controller->sendMsg(this, MSG_ENABLE_LOCAL_VIDEO , (void*)&enable);
+}
+
+bool CommandLineView::enableLocalAudio(int enable) {
+    if(!m_controller)
+        return false;
+
+    return m_controller->sendMsg(this, MSG_ENABLE_LOCAL_AUDIO , (void*)&enable);
 }
 
 bool CommandLineView::exit() {

@@ -25,6 +25,10 @@ class CommandLineView : public MsgHandler{
 
         bool enableVideo(int enable);
 
+        bool enableLocalAudio(int enable); 
+
+        bool enableLocalVideo(int enable);
+
         bool printDeviceInfo(); 
 
         bool exit(); 

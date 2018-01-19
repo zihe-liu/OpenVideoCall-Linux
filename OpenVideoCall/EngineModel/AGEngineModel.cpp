@@ -23,6 +23,8 @@ AGEngineModel::AGEngineModel() {
     registerHandler(MSG_CONFIGURE, (handler_ptr)&AGEngineModel::onConfigureMsg);
     registerHandler(MSG_ENABLE_VIDEO, (handler_ptr)&AGEngineModel::onEnableVideoMsg);
     registerHandler(MSG_ENABLE_AUDIO, (handler_ptr)&AGEngineModel::onEnableAudioMsg);
+    registerHandler(MSG_ENABLE_LOCAL_VIDEO, (handler_ptr)&AGEngineModel::onEnableLocalVideoMsg);
+    registerHandler(MSG_ENABLE_LOCAL_AUDIO, (handler_ptr)&AGEngineModel::onEnableLocalAudioMsg);
     registerHandler(MSG_PRINT_DEVICE_INFO, (handler_ptr)&AGEngineModel::onPrintDeviceInfoMsg);
     registerHandler(MSG_EXIT, (handler_ptr)&AGEngineModel::onExitMsg);
 
@@ -54,6 +56,10 @@ bool AGEngineModel::onOpenMsg(void* msg) {
     m_engine->enableVideo(m_cfg.enableVideo);
 
     m_engine->enableAudio(m_cfg.enableAudio);
+
+    m_engine->muteLocalVideo(!m_cfg.enableLocalVideo);
+
+    m_engine->muteLocalAudio(!m_cfg.enableLocalAudio);
 
     m_engine->setVideoProfile(m_cfg.videoProfile);
 
@@ -91,6 +97,34 @@ bool AGEngineModel::onEnableAudioMsg(void* msg) {
         cout << "AgoraRtcEngine: enable audio: " << enable <<endl;
     } else {
         cout << "AgoraRtcEngine: already enabled audio: " << enable <<endl;
+    }
+
+    return true;
+}
+
+bool AGEngineModel::onEnableLocalVideoMsg(void* msg) {
+    int enable = *(reinterpret_cast<int*>(msg));
+
+    if(enable != m_cfg.enableLocalVideo) {
+        m_cfg.enableLocalVideo =  enable;
+        m_engine->muteLocalVideo(!m_cfg.enableLocalVideo);
+        cout << "AgoraRtcEngine: enable local video: " << enable <<endl;
+    } else {
+        cout << "AgoraRtcEngine: already enabled local video: " << enable <<endl;
+    }
+
+    return true;
+}
+
+bool AGEngineModel::onEnableLocalAudioMsg(void* msg) {
+    int enable = *(reinterpret_cast<int*>(msg));
+
+    if(enable != m_cfg.enableLocalAudio) {
+        m_cfg.enableLocalAudio =  enable;
+        m_engine->muteLocalAudio(!m_cfg.enableLocalAudio);
+        cout << "AgoraRtcEngine: enable local audio: " << enable <<endl;
+    } else {
+        cout << "AgoraRtcEngine: already enabled local audio: " << enable <<endl;
     }
 
     return true;
