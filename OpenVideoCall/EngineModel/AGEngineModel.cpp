@@ -41,13 +41,10 @@ void AGEngineModel::initialize() {
     }
 
     m_cameraMgr = new AGCameraManager();
-    m_cameraMgr->create(m_engine->getRtcEngine());
 
     m_audInMgr = new AGAudInputManager();
-    m_audInMgr->create(m_engine->getRtcEngine());
 
     m_playoutMgr = new AGPlayoutManager();
-    m_playoutMgr->create(m_engine->getRtcEngine());
 }
 
 bool AGEngineModel::onOpenMsg(void* msg) {
@@ -65,12 +62,21 @@ bool AGEngineModel::onOpenMsg(void* msg) {
 
     m_engine->setAudioProfile(m_cfg.audioProfile, m_cfg.audioScenario);
 
-    return m_engine->joinChannel(m_cfg.channelId.c_str(), m_cfg.uid, m_cfg.channelProfile); 
+    int ret = m_engine->joinChannel(m_cfg.channelId.c_str(), m_cfg.uid, m_cfg.channelProfile); 
+
+    m_cameraMgr->create(m_engine->getRtcEngine());
+    m_audInMgr->create(m_engine->getRtcEngine());
+    m_playoutMgr->create(m_engine->getRtcEngine());
+    
+    return ret;
 }
 
 bool AGEngineModel::onCloseMsg(void* msg) {
     cout << "AgoraRtcEngine:close" <<endl;
 
+    m_cameraMgr->close();
+    m_audInMgr->close();
+    m_playoutMgr->close();
     return m_engine->leaveChannel(); 
 }
 
@@ -141,19 +147,23 @@ bool AGEngineModel::onConfigureMsg(void* msg) {
 bool AGEngineModel::onPrintDeviceInfoMsg(void* msg) {
     cout << "model onPrintDeviceInfoMsg"<<endl;
 
-    cout <<"camera device number is:" << m_cameraMgr->getDeviceCount() << endl;
-    cout <<"current camera device id is:" << m_cameraMgr->getCurDeviceId() << endl;
+    cout <<"camera device number is:" << (uint32_t)m_cameraMgr->getDeviceCount() << endl;
+    //cout <<"current camera device id is:" << cameraId << endl;
 
-    cout <<"audio input device number is:" << m_audInMgr->getDeviceCount() << endl;
-    cout <<"current audio input device id is:" << m_audInMgr->getCurDeviceId() << endl;
+    cout <<"audio input device number is:" << (uint32_t)m_audInMgr->getDeviceCount() << endl;
+    //cout <<"current audio input device id is:" << auInputId << endl;
 
-    cout <<"audio playout device number is:" << m_playoutMgr->getDeviceCount() << endl;
-    cout <<"current audio playout device id is:" << m_playoutMgr->getCurDeviceId() << endl;
+    cout <<"audio playout device number is:" << (uint32_t)m_playoutMgr->getDeviceCount() << endl;
+    //cout <<"current audio playout device id is:" << auPlayoutId << endl;
 
     return true;
 }
 
 bool AGEngineModel::onExitMsg(void* msg) {
+    m_cameraMgr->close();
+    m_audInMgr->close();
+    m_playoutMgr->close();
+
     m_engine->leaveChannel();
     m_engine->release();
 
