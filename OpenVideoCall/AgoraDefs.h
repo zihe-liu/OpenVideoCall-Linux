@@ -1,7 +1,6 @@
 #pragma once
 #include<cstdint>
 #include<string>
-#include<sstream>
 
 typedef struct AppConfig {
     uint32_t uid;

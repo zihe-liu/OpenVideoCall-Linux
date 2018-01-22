@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./openVideoCall  --appId 111 \
+./openVideoCall  --appId 0c0b4b61ad78a50444 \
                  --uid 1024  \
                  --channel demoChannel \
                  --channelProfile 0 \

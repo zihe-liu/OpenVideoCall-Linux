@@ -42,11 +42,7 @@ void AGEngineEventHandler::onError(int err, const char* msg)
 
 void AGEngineEventHandler::onAudioQuality(uid_t uid, int quality, unsigned short delay, unsigned short lost)
 {
-    if(m_receiver != NULL)
-        m_receiver->onEvent(EID_AUDIO_QUALITY, NULL);
-}
-
-void AGEngineEventHandler::onAudioVolumeIndication(const AudioVolumeInfo* speakers, unsigned int speakerNumber, int totalVolume)
+    if(m_receiver != NULL) m_receiver->onEvent(EID_AUDIO_QUALITY, NULL); } void AGEngineEventHandler::onAudioVolumeIndication(const AudioVolumeInfo* speakers, unsigned int speakerNumber, int totalVolume)
 {
     if(m_receiver != NULL)
         m_receiver->onEvent(EID_AUDIO_VOLUME_INDICATION, NULL);

@@ -52,10 +52,11 @@ bool AGEngine::joinChannel(const char* channelId, int uid, int channelProfie)
         else
             m_agoraEngine->setChannelProfile(CHANNEL_PROFILE_COMMUNICATION);
 
-        AParameter msp(*m_agoraEngine);
-        msp->setInt("che.video.local.camera_index", 0);
-
         ret = m_agoraEngine->joinChannel(NULL, channelId, NULL, uid);
+        if(ret == 0) {
+            AParameter msp(*m_agoraEngine);
+            msp->setInt("che.video.local.camera_index", 0);
+        }
     }
 
     return ret == 0 ? true : false;
